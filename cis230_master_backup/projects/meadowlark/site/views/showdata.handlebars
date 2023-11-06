@@ -1,0 +1,45 @@
+{{#if isDeleted}}
+
+<h1>ALL DATA HAS BEEN DELETED FROM TABLE NAME: {{ table_name }}</h1>
+
+{else}
+
+<h1>Displaying JSON object using #each built-in-helper</h1>
+
+<button onclick="showData()">Show Data</button>
+<button onclick="hideData()">Hide Data</button>
+
+<p id="ptag" name="ptag"></p>
+
+
+
+<table id="mytable" name="mytable">
+<tr>
+<th>X VALUE</th>
+<th>Y VALUE</th>
+</tr>
+{{#each data}}
+<tr>
+<td>{{this.x}}</td>
+<td>{{this.y}}</td>
+</tr>
+{{/each}}
+</table>
+
+
+
+
+<!-- Iterate over a list using #each built-in-helper
+<ul id="x_data" name="x_data" class="x_data">
+{{#each data}}
+<li>{{this.x}}</li>
+{{/each}}
+</ul>
+-->
+
+{{/if}}
+
+
+{{! this is a comment in handlebars }}
+{{! This comment will not be in the output }}
+<!-- This comment will be in the output -->
