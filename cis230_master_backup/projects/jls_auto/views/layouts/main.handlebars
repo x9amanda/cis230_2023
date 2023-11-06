@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/styles/main.css" />
+    <link rel="stylesheet" href="/styles/header.css" />
+    <link rel="stylesheet" href="/styles/header.css" />
+    <script src="/scripts/fun.js" defer></script>
+</head>
+
+<body>
+    <nav id="headernav">
+        {{> header}} {{! this bring in header.handlebars from partials}}
+    </nav>
+    <maind id="mainbody">
+        {{{ body }}}
+    </maind>
+
+    <div>
+        <img src="{{!PDF file needs to be converted to image or
+        need to type out the plan in formatted text}}" name="JLSauto" alt="JLSauto" width>
+    </div>
+
+    <nav id="footernav">
+        <span>
+            {{> footer}} {{! this bring in footer.handlebars from partials}}
+        </span>
+    </nav>
+
+</body>
+
+</html>
