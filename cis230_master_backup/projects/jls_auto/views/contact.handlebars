@@ -5,18 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{pageTitle}}</title>
-    <link rel="stylesheet" href="../../styles/week6.css">
-    <link rel="icon" href="../../images/icon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../static/styles/contact.css">
+    <link rel="icon" href="/static/images/icon.ico" type="image/x-icon">
 </head>
 
 <body>
-    <h1>Contact Us</h1>
-    <p>Feel free to get in touch with us!</p>
-    <p>Email: joelindsay@gmail.com</p>
-    <p>Phone: 518-423-0223</p>
-    <img src="../../images/JLSauto.jpg" alt="JL'$ Auto" title="JL'$ Auto">
-    <a href="home.handlebars">Home</a><br>
-    <a href="about.handlebars">About Us</a>
+    <header>
+        <h1>Contact Us</h1>
+    <nav id="headernav">
+        {{> header}} {{! this bring in header.handlebars from partials}}
+    </nav>
+    </header>
+
+    <section>
+        <p>Feel free to get in touch with us!</p>
+        <p>Email: joelindsay@gmail.com</p>
+        <p>Phone: 518-423-0223</p>
+        <img src="../static/images/JLSauto.jpg" alt="JL'$ Auto" title="JL'$ Auto">
+    </section>
+
+    <footer>
+        <nav>
+            <a href="home.handlebars">Home</a><br>
+            <a href="about.handlebars">About Us</a>
+            <a href="getScrapSteelPrice.handlebars"></a>
+        </nav>
+    </footer>
 
 </body>
 

@@ -1,175 +1,144 @@
-const express = require('express')
-const expressHandlebars = require('express-handlebars')
-const mariadb = require('mariadb')
-const path = require('path')
-const axios = require('axios')
+const express = require('express');
+const expressHandlebars = require('express-handlebars');
+const mariadb = require('mariadb');
+const path = require('path');
+const fs = require('fs');
+const csv = require('csv-parser');
+const axios = require('axios');
 
-const port = process.env.PORT || 3000
-const app = express()
+const port = process.env.PORT || 8000;
+const app = express();
 
-app.engine('handlebars', expressHandlebars.engine())
-app.set('view engine', 'handlebars')
+app.engine('handlebars', expressHandlebars.engine());
+app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'static')));
 
-
-// establish a connection to a mariadb database
-
 const pool = mariadb.createPool({
-   host: 'localhost',
-   user: 'week6user',
-   password: 'week6pw',
-   connectionLimit: 5
-})
+    host: 'localhost',
+    user: 'week6user',
+    password: 'week6pw',
+    connectionLimit: 5
+});
 
+const METALS_API_KEY = 'YOUR_METALS_API_KEY';
 
-app.get('/api_advice', (req, res) => {
+// Read the CSV file and store the gross vehicle weights
+const vehicleWeights = [];
 
-
-    // https://api.adviceslip.com/advice
-    // {"slip": { "id": 81, "advice": "Age is of no importance, unless you are a cheese."}}
-    axios.get('https://api.adviceslip.com/advice?NAME=EIPP&VAL=10')
-    .then(response => {
-        //console.log(response)
-        console.log(response.data)
-        console.log(response.data.slip)
-
-        const obj = response.data.slip
-        const lid = obj.id
-        const advice = obj.advice
-        
-        console.log(obj)    // NOTE: same as console.log(response.data.slip)
-        console.log(lid)
-        console.log(advice)
-
-
-        json_obj = JSON.stringify(obj)
-        res.end(json_obj)
+fs.createReadStream('path/to/vehicle_weights.csv')
+    .pipe(csv())
+    .on('data', (row) => {
+        vehicleWeights.push(row);
     })
-    .catch(error => {
-      console.log(error)
-    })
+    .on('end', () => {
+        console.log('CSV file successfully processed.');
+    });
 
-})
-
-
-
-app.get('/api_nasa', (req, res) => {
-    
-    axios.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY')
-    .then(response => {
-
-        console.log(response.data)
-        console.log(response.data.url)
-        console.log(response.data.explanation)
-
-        res.end(response.data.explanation)
-
-    })
-    .catch(error => {
-        console.log(error)
-    })
-
-})
-
-app.get('/api_dadjokes', async(req, res) => {
-
-    const options = {
-      method: 'GET',
-      url: 'https://dad-jokes.p.rapidapi.com/random/joke',
-      headers: {
-        'X-RapidAPI-Key': '08e2971577mshdbbba3e33d8403dp17467bjsn54589f154ad5',
-        'X-RapidAPI-Host': 'dad-jokes.p.rapidapi.com'
-      }
-    }
-    
+// Route to get scrap steel prices from metals-api based on gross vehicle weight
+app.get('/getMetalPrice/:year/:make/:model', async (req, res) => {
     try {
-        const response = await axios.request(options)
+        const year = req.params.year;
+        const make = req.params.make;
+        const model = req.params.model;
 
-        //console.log(response.data);
-        //console.log(response.data.body)
+        // Find the corresponding gross vehicle weight based on the selected year, make, and model
+        const selectedVehicle = vehicleWeights.find(vehicle => 
+            vehicle.Year === year && vehicle.Make === make && vehicle.Model === model);
 
-        const obj = response.data.body[0]
-        const setup = obj.setup
-        const punchline = obj.punchline
+        if (!selectedVehicle) {
+            return res.status(404).json({ error: 'Vehicle not found' });
+        }
 
-        //console.log(response.data.body[0].setup)
-        //console.log(response.data.body[0].punchline)
-        //console.log(setup)
-        //console.log(punchline)
+        const grossVehicleWeight = selectedVehicle.GrossWeight;
 
-        res.type('html')
-        res.status(200)
-        const msg = '<h3>' + setup + '</h3>' + '<p><p><p>'
-            + '<h4>' + punchline + '</h4>'
+        // Fetch the metal price from metals-api
+        const response = await axios.get('https://metals-api.com/api/latest', {
+            params: {
+                access_key: METALS_API_KEY,
+                base: 'USD',
+                symbols: 'STEEL-SC',
+            },
+        });
 
-        // res.end(JSON.stringify(response.data))
-        res.end(msg)
+        // Extract metal price from the response
+        const metalPrice = response.data.rates['STEEL-SC'];
 
+        // Use the grossVehicleWeight to calculate the scrap metal price
+
+        res.json({ metalPrice });
     } catch (error) {
         console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
+});
 
-
-
-})
-
-
-
-// route to test my database setup
-app.get('/test', async(req, res) => {
+// Route to test my database setup
+app.get('/test', async (req, res) => {
     let conn;
     try {
         conn = await pool.getConnection();
-        const dbtest = await conn.query('select 1 as val')
-        console.log(dbtest)
+        const dbtest = await conn.query('select 1 as val');
+        console.log(dbtest);
 
-        res.type('text/plain')
-        res.status(200)
-        res.send('made it to route: /test')
-    } catch(err) {
-        console.log(err)
+        res.type('text/plain');
+        res.status(200);
+        res.send('made it to route: /test');
+    } catch (err) {
+        console.log(err);
     } finally {
         if (conn) return conn.end();
     }
-})
+});
 
-// route to /
-app.get('/', (req, res) => {    
+app.get('/', (req, res) => {
     res.render('home', {
         title: "JL'$ Auto Home",
         name: 'Amanda Dockray',
-    })
-})
+    });
+});
 
-
-// route to /about
 app.get('/about', (req, res) => {
     res.render('about', {
         title: "About JL'$ Auto",
-    })
-})
+    });
+});
 
-// custom 500
-app.use((err, req, res, next) => {
-    console.error(err.message)
-    res.type('text/plain')
-    res.status(500)
-    res.send('500 - Server Error')
-})
+app.get('/contact', (req, res) => {
+    res.render('contact', {
+        title: "Contact JL'$ Auto",
+    });
+});
 
+app.get('/login', (req, res) => {
+    res.render('login', {
+        title: "Login to JL'$ Auto",
+    });
+});
 
-// custom 404
-app.use((req, res)=> {
-    res.type('text/plain')
-    //console.log(res.get('Content-Type'))
-    res.status(404)
-    res.send('404 - Page Not Found')
-})
+app.get('/scrapcalc', (req, res) => {
+    // Add logic for scrap calculation page
+    res.render('scrapcalc', {
+        title: "Scrap Calculation",
+    });
+});
 
+app.post('/scrapresult', (req, res) => {
+    // Add logic to handle scrap calculation result
+    res.render('scrapresult', {
+        title: "Scrap Result",
+        result: /* result data */,
+    });
+});
 
-// start the server listening for requests...
+app.get('/home', (req, res) => {
+    res.render('home', {
+        title: "JL'$ Auto Home",
+        name: 'Amanda Dockray',
+    });
+});
+
+// Start the server
 app.listen(port, () => {
-    console.log(`Running on http://localhost:${port} ` +
-    `Press Ctrl-C to terminate.`)
-})
+    console.log(`Running on http://localhost:${port}. Press Ctrl-C to terminate.`);
+});
