@@ -16,10 +16,10 @@ app.use(express.static(path.join(__dirname, 'static')));
 // establish a connection to a mariadb database
 
 const pool = mariadb.createPool({
-    host: 'localhost',
-    user: 'week6user',
-    password: 'week6pw',
-    connectionLimit: 5
+   host: 'localhost',
+   user: 'week6user',
+   password: 'week6pw',
+   connectionLimit: 5
 })
 
 
