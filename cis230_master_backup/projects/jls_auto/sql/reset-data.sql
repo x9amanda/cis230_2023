@@ -1,6 +1,4 @@
-CREATE DATABASE 'week6db';
-
-USE week6db;
+USE metaldbdb;
 
 /* SHOW DATABASES; */
 
@@ -10,26 +8,20 @@ CREATE OR REPLACE TABLE log_in
   password VARCHAR(50) NULL
 );
 /* INSERTS WILL GO HERE... FOR EXAMPLE... */
-INSERT INTO log_in values ('eipp', 'not_enctrypted_pw');
+INSERT INTO log_in values ('metaluser', 'metalpw');
 
 
-CREATE OR REPLACE TABLE myimages (
+CREATE OR REPLACE TABLE vehicles (
     id      INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name    VARCHAR(30) NOT NULL,
-    image   LONGBLOB NOT NULL,
-    typeid  VARCHAR(20) NOT NULL,
-    price   decimal(10,2) NOT NULL,
-    size    varchar(25) NOT NULL,
-    color   varchar(50) NOT NULL
+    year    VARCHAR(30) NOT NULL,
+    make   LONGBLOB NOT NULL,
+    model  VARCHAR(20) NOT NULL,
+    engine
+    GVW   decimal(10,2) NOT NULL,
 );
 
 /* INSERTS WILL GO HERE... FOR EXAMPLE... */
-insert into myimages(name, image, typeid, price, size, color)
+insert into vehicles(year, make, model, engine, GVW)
 values (
-    'My Fave Chair', 
-    '/path/to/the/image.jpg', 
-    'Chair', 
-    1000.00, 
-    'Large', 
-    'Green'
+
 );

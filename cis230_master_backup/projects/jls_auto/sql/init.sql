@@ -2,15 +2,15 @@
 /* source this script using: source init.sql */
 /* source your reset file: source reset-data.sql */
 
-DROP DATABASE IF EXISTS week6db;
-CREATE DATABASE 'week6db';
+DROP DATABASE IF EXISTS scrapmetal;
+CREATE DATABASE 'metaldb';
 
-DROP USER IF EXISTS 'week6user'@localhost;
-CREATE USER 'week6user'@localhost IDENTIFIED BY 'week6pw';
+DROP USER IF EXISTS 'metaluser'@localhost;
+CREATE USER 'metaluser'@localhost IDENTIFIED BY 'metalpw';
 
 /* SELECT User FROM mysql.user WHERE User = 'week6user'; */
 
-GRANT ALL PRIVILEGES ON 'week6db'.* TO 'week6user'@localhost IDENTIFIED BY 'week6pw';
+GRANT ALL PRIVILEGES ON 'metaldb'.* TO 'metaluser'@localhost IDENTIFIED BY 'metalpw';
 FLUSH PRIVILEGES;
 
-SHOW GRANTS FOR 'week6user'@localhost;
+SHOW GRANTS FOR 'metaluser'@localhost;
