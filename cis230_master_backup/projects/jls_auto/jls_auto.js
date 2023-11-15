@@ -2,9 +2,10 @@ const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const mariadb = require('mariadb');
 const path = require('path');
-const fs = require('fs');
-const csv = require('csv-parser');
 const axios = require('axios');
+const cookieParser = require('cookie-parser')
+const expressSession = require('express-session')
+const { credentials } = require('./config')
 
 const port = process.env.PORT || 8000;
 const app = express();

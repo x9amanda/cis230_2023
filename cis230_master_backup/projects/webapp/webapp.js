@@ -3,6 +3,10 @@ const expressHandlebars = require('express-handlebars')
 const mariadb = require('mariadb')
 const path = require('path')
 const axios = require('axios')
+const cookieParser = require('cookie-parser')
+const expressSession = require('express-session')
+const { credentials } = require('./config')
+
 
 const port = process.env.PORT || 3000
 const app = express()
@@ -11,6 +15,21 @@ app.engine('handlebars', expressHandlebars.engine())
 app.set('view engine', 'handlebars')
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'static')));
+
+//order of next two lines is important. cookieparser first.
+app.use(cookieParser(credentials.cookie_secret))
+app.use(expressSession({
+    resave: false,
+    saveUninitialized: false,
+    secret: credentials.cookie_secret,
+
+}))
+// resave: forces session to be saved back to the store even if
+//          the request wasn't modified. false is typically preferred
+// saveUninitialized: true causes uninitialized sessions to be saved
+//                    to the store even whan not modified
+// secret: the key used to sign the cookie of session id
+
 
 
 // establish a connection to a mariadb database
@@ -135,13 +154,62 @@ app.get('/test', async(req, res) => {
 })
 
 // route to /
-app.get('/', (req, res) => {    
+app.get('/', (req, res) => {
+    
+    //console.log('dropping little trails of cookies')
+
+    res.cookie('monster',
+               'bloodsucker',
+               {secure: true, maxAge: 720000}
+               )
+
+    res.cookie('signed_monster',
+               'signed_bloodsucker',
+               {signed: true,
+                secure: true,
+                maxAge: 720000})
+    //console.log('all done dropping little trails of cookies')
+
+    //secure: only sends over https
+    //signed: if tampered with, rejected by the server, restored to original value
+    //maxAge: how long a client keeps a cookie before deleting it
+    //        if omitted, it is deleted when browser is closed
+
+    req.session.username = 'x9amanda'
+    req.session.password = 'password'
+    const color = req.session.colorScheme || 'dark'
+    console.log('session color: ' + color)
+
     res.render('home', {
         title: 'TGIFF Home',
         name: 'Professor Eipp',
     })
 })
 
+app.get("/cookies", (req, res) => {
+    const monster_value = 'monster: ' + req.cookies.monster + '<br>'
+    const signed_monster_value = 'monster: ' + req.signedCookies.signed_monster + '<br>'
+
+    //delete cookies
+    res.clearCookie('monster')
+    res.clearCookie('signed_monster')
+
+    //clear session data
+    delete req.session.username
+    delete req.session.password
+
+    res.type('html')
+    res.end(values)
+
+})
+
+app.get("/jpeg", (req, res) => {
+
+    res.render('imagepage', {
+        title: 'Images',
+        src: '/images/file.jpeg',
+    })
+})
 
 // route to /about
 app.get('/about', (req, res) => {
@@ -171,5 +239,5 @@ app.use((req, res)=> {
 // start the server listening for requests...
 app.listen(port, () => {
     console.log(`Running on http://localhost:${port} ` +
-    `Press Ctrl-C to terminate.`)
+                `Press Ctrl-C to terminate.`)
 })
