@@ -14,13 +14,13 @@ INSERT INTO log_in values ('metaluser', 'metalpw');
 CREATE OR REPLACE TABLE vehicles (
     id      INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     year    VARCHAR(30) NOT NULL,
-    make   LONGBLOB NOT NULL,
+    make   VARCHAR(20) NOT NULL,
     model  VARCHAR(20) NOT NULL,
-    engine
+    engine  VARCHAR(10) NOT NULL,
     GVW   decimal(10,2) NOT NULL,
 );
 
-/* INSERTS WILL GO HERE... FOR EXAMPLE... */
+/* INSERTS WILL GO HERE */
 insert into vehicles(year, make, model, engine, GVW)
 values (
 
