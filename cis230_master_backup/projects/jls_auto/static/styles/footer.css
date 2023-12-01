@@ -1,5 +1,11 @@
-#footernav {
-    color: tomato;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 200%;
+footer {
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: #333;
+    padding: 15px 0;
+    text-align: center;
+    color: #4CAF50;
+}
+
+footer span {
+    font-size: 14px;
 }

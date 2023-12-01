@@ -1,4 +1,4 @@
-USE metaldbdb;
+USE metaldb;
 
 /* SHOW DATABASES; */
 
@@ -7,8 +7,8 @@ CREATE OR REPLACE TABLE log_in
   username VARCHAR(50) NULL,
   password VARCHAR(50) NULL
 );
-/* INSERTS WILL GO HERE... FOR EXAMPLE... */
-INSERT INTO log_in values ('metaluser', 'metalpw');
+
+INSERT INTO log_in values ('amandadockray', 'metalpw');
 
 
 CREATE OR REPLACE TABLE vehicles (

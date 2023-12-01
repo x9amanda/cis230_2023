@@ -1,3 +1,83 @@
 body {
-    color: blue;
+    margin: 0;
+    color: green;
+}
+
+
+#mainbody h1 {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 2em;
+    padding-left: 1em;
+}
+
+#mainbody p {
+    padding-left: 2em;
+}
+
+#mainbody div {
+    padding-left: 2em;
+}
+
+
+.button {
+    font-size: 1em;
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(6, 81, 27);
+    padding: 2em;
+    border: 1 solid red 2px;
+    border-radius: 5px;
+    cursor:crosshair;
+}
+
+
+p.showexample {
+    font-size: 200%;
+    color: red;
+}
+
+p.nasa_data {
+    margin: 40px;
+    padding: 2em;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1em;
+    border: 1px solid blue;
+    text-align: center;
+}
+
+
+img {
+    height: 25%;
+    width: 25%;
+}
+
+div.advice {
+    margin: 1em;
+    font-size: 300%;
+    text-align: center;
+    text-shadow: 2px 2px #abcdef;
+}
+
+div.dbtest_view {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 200%;
+    color: darkred;
+    text-align: center;
+    text-shadow: 2px 2px #abcdef;
+}
+
+h3.joke_setup {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 200%;
+    color: darkred;
+    text-align: center;
+    text-shadow: 2px 2px #abcdef;
+}
+
+
+h4.joke_punchline {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 150%;
+    color: black;
+    text-align: center;
+    text-shadow: 1px 1px #fedcba;
 }

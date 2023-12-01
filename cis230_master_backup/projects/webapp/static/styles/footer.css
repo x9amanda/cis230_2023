@@ -1,5 +1,17 @@
-header {
-    color: tomato;
+#footernav footer {
+    display: inline;
+}
+
+#footernav footer div p {
+    /* margin: 3px; */
+    /* border: solid green 2px; */
+    border: none;
+    padding-right: 2em;
+    text-align: right;
+}
+
+#footernav footer div p copyright {
+    font-size: 7px;
     font-family: 'Courier New', Courier, monospace;
-    font-size: 200%;
+    color: red;
 }

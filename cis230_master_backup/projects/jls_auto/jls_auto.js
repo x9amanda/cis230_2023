@@ -12,7 +12,7 @@ const { auth } = require('express-openid-connect');
 const { requiresAuth } = require('express-openid-connect');
 // Set port
 const port = process.env.PORT || 3000;
-const app = express()
+const app = express();
 
 // Use handlebars as the engine.
 app.engine('handlebars', expressHandlebars.engine());
@@ -65,8 +65,8 @@ app.get('/test', async (req, res) => {
     let conn;
     try {
         conn = await pool.getConnection();
-        const dbtest = await conn.query('select 1 as val')
-        console.log(dbtest)
+        const dbtest = await conn.query('select 1 as val');
+        console.log(dbtest);
 
         //res.type('text/plain')
         //res.status(200)
@@ -75,15 +75,16 @@ app.get('/test', async (req, res) => {
         res.render('dbtest', {
             title: 'DB Test',
             val: JSON.stringify(dbtest),
-        })
+        });
 
 
     } catch (err) {
-        console.log(err)
+        console.error(err);
+        res.status(500).send('Internal Server Error');
     } finally {
         if (conn) return conn.end();
     }
-})
+});
 
 // Route to /
 app.get('/callback', (req,res) => {
@@ -91,7 +92,7 @@ app.get('/callback', (req,res) => {
 })
 
 // Route to /
-app.get('/home', (req, res) => {
+app.get('/', (req, res) => {
     // console.log('Cookie Trail has been created')
     // res.cookie('scrapcookie',
     //            'scrapmetal',
@@ -110,23 +111,22 @@ app.get('/home', (req, res) => {
 
     res.render('home', {
         title: "JL'$ Auto Home",
-        name: 'Amanda Dockray',
+        pdf: '/images/jls_auto_web.pdf',
+        icon: '/images/icon.ico',
         isAuthenticated: req.oidc.isAuthenticated()
-    })
-})
+    });
+});
 
 // // FIX THIS
 // // req.isAuthenticated is provided from the auth router
-// app.get('/', (req, res) => {
-//     if (req.oidc.isAuthenticated()) {
-//         res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-//     } else {
-//             return;
-//         }
-//     }
+app.get('/login', (req, res) => {
+    if (req.oidc.isAuthenticated()) {
 
-//     res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-//   });
+    } else {
+        res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+    }
+    
+});
 
 // FIX THIS!!!!! getting error
 //  Route to /cookies
@@ -147,43 +147,56 @@ app.get('/home', (req, res) => {
 // })
 
 // Route to about
-app.get('/about', (req, res) => {
+app.get('/about', requiresAuth(), (req, res) => {
     res.render('about', {
         title: "About JL'$ Auto",
+        icon: '/images/icon.ico',
     })
 })
 
 // Route to contact
-app.get('/contact', (req, res) => {
+app.get('/contact', requiresAuth(), (req, res) => {
     res.render('contact', {
         title: "Contact JL'$ Auto",
-    });
-});
-
-// Route to home
-app.get('/home', (req, res) => {
-    res.render('home', {
-        title: "JL'$ Auto Home",
-        name: 'Amanda Dockray',
+        icon: '/images/icon.ico',
+        src: '/images/JLSauto.jpg'
     });
 });
 
 // Route to scrap calculation
-/* app.get('/scrapcalc', (req, res) => {
-    ADD LOGIC FOR SCRAP CALCULATION
+app.get('/scrapcalc', requiresAuth(), (req, res) => {
     res.render('scrapcalc', {
         title: "Scrap Calculation",
+        icon: '/images/icon.ico',
     });
 });
 
-// Route to scrap calculation result
-app.post('/scrapresult', (req, res) => {
-    ADD LOGIC FOR SCRAP CALULATION RESULT
-    res.render('scrapresult', {
-        title: "Scrap Result",
-        result: ADD RESULT DATA HERE,
-    });
-}); */
+// // Route to scrap calculation result
+// app.post('/scrapresult', requiresAuth(), (req, res) => {
+//     ADD LOGIC FOR SCRAP CALULATION RESULT
+//     res.render('scrapresult', {
+//         title: "Scrap Result",
+//         icon: '/images/icon.ico',
+//         result: ADD RESULT DATA HERE,
+//     });
+// });
+
+// custom 500
+app.use((err, req, res, next) => {
+    console.error(err.message)
+    res.type('text/plain')
+    res.status(500)
+    res.send('500 - Server Error')
+})
+
+
+// custom 404
+app.use((req, res)=> {
+    res.type('text/plain')
+    //console.log(res.get('Content-Type'))
+    res.status(404)
+    res.send('404 - Page Not Found')
+})
 
 
 // Start the server

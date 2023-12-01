@@ -1,20 +1,21 @@
 {
   "name": "webapp",
   "version": "1.0.0",
-  "description": "An app for JL'$ Auto that retrieves vehicle data",
+  "description": "Customer Management for TGIFF",
   "main": "webapp.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node webapp.js",
     "dev": "nodemon webapp.js"
   },
-  "author": "Amanda Dockray",
+  "author": "William Eipp",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.6.2",
+    "axios": "^1.6.0",
     "cookie-parser": "^1.4.6",
     "express": "^4.18.2",
     "express-handlebars": "^7.1.2",
+    "express-openid-connect": "^2.17.1",
     "express-session": "^1.17.3",
     "handlebars-helpers": "^0.10.0",
     "mariadb": "^3.2.2",

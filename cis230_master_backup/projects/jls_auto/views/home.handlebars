@@ -4,66 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{pageTitle}}</title>
-    <link rel="stylesheet" href="/static/styles/home.css">
-    <link rel="icon" href="/static/images/truck.ico" type="image/x-icon">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/static/styles/header.css" />
+    <link rel="stylesheet" href="/static/styles/footer.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap">
+    <link rel="icon" href={{icon}}>
 </head>
 
-<body>
-    <header>
-        <h1>Home</h1>
-        <nav id="headernav">
-            {{> header}} {{! this bring in header.handlebars from partials}}
-        </nav>
-    </header>
-
-    <section>
-        <h2>Select Your Vehicle</h2>
-        <form id="vehicleForm">
-            <label for="year">Year:</label>
-            <select id="year" name="year">
-                <!-- Populate this dropdown dynamically with years -->
-            </select>
-
-            <label for="make">Make:</label>
-            <select id="make" name="make">
-                <!-- Populate this dropdown dynamically with makes -->
-            </select>
-
-            <label for="model">Model:</label>
-            <select id="model" name="model">
-                <!-- Populate this dropdown dynamically with models -->
-            </select>
-
-            <button type="button" onclick="calculateScrapPrice()">Calculate Scrap Price</button>
-        </form>
-
-        <div id="result">
-            <!-- Display the scrap metal price here -->
-        </div>
-    </section>
-
-    <!-- ... (your existing content) ... -->
-
-    <script>
-        // Function to fetch and display the scrap metal price
-        async function calculateScrapPrice() {
-            const year = document.getElementById('year').value;
-            const make = document.getElementById('make').value;
-            const model = document.getElementById('model').value;
-
-            try {
-                // Send a request to your server to get the scrap metal price based on the selected vehicle
-                const response = await axios.get(`/getMetalPrice/${year}-${make}-${model}`);
-
-                // Display the scrap metal price
-                document.getElementById('result').innerText = `Scrap Metal Price: $${response.data.metalPrice}`;
-            } catch (error) {
-                console.error(error);
-                document.getElementById('result').innerText = 'Error fetching scrap metal price';
-            }
-        }
-    </script>
+<body id="mainbody">
+    <h1>{{title}}</h1>
+    <object style="width: 100%; height: 800px;" data={{pdf}}></object>
 </body>
 
 </html>

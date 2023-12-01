@@ -1,28 +1,27 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <title>{{ title }}</title>
+        <link rel="stylesheet" href="/styles/main.css" />
+        <link rel="stylesheet" href="/styles/header.css" />
+        <link rel="stylesheet" href="/styles/footer.css" />
+        <script src="/scripts/fun.js" defer></script>
+    </head>
+    <body>
+        <nav id="headernav" >
+            {{> header}} {{! this brings in header.handlebars from partials }}
+        </nav>
 
-<head>
-    <title>{{ title }}</title>
-    <link rel="stylesheet" href="/styles/main.css" />
-    <link rel="stylesheet" href="/styles/header.css" />
-    <link rel="stylesheet" href="/styles/header.css" />
-    <script src="/scripts/fun.js" defer></script>
-</head>
+        <main id="mainbody">
+            {{{ body }}}
+        </main>
 
-<body>
-    <nav id="headernav">
-        {{> header}} {{! this bring in header.handlebars from partials}}
-    </nav>
-    <maind id="mainbody">
-        {{{ body }}}
-    </maind>
-
-    <nav id="footernav">
-        <span>
-            {{> footer}} {{! this bring in footer.handlebars from partials}}
-        </span>
-    </nav>
-
-</body>
-
+        <nav id="footernav">
+            <span>
+                {{> footer}} {{! this brings in footer.handlebars from partials }}
+            </span>
+        </nav>
+        
+        
+    </body>
 </html>
