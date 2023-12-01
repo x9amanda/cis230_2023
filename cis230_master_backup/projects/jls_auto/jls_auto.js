@@ -86,6 +86,47 @@ app.get('/test', async (req, res) => {
     }
 });
 
+// Middleware to handle form data
+app.use(express.urlencoded({ extended: true }));
+
+// Route to render the form
+app.get('/getweight', async (req, res) => {
+    try {
+        const connection = await pool.getConnection();
+        const usedb = await connection.query('USE scrapdb');
+        const result = await connection.query('SELECT DISTINCT year, make, model FROM vehicles');
+        connection.release();
+
+        const years = [...new Set(result.map(vehicle => vehicle.year))];
+        const makes = [...new Set(result.map(vehicle => vehicle.make))];
+        const models = [...new Set(result.map(vehicle => vehicle.model))];
+
+        res.render('getweight', { years, makes, models });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Route to handle form submission and display the weight result
+app.post('/weightresult', async (req, res) => {
+    const { year, make, model } = req.body;
+
+    try {
+        const connection = await pool.getConnection();
+        await connection.query('USE scrapdb');
+        const result = await connection.query('SELECT curb_weight FROM vehicles WHERE year = ? AND make = ? AND model = ?', [year, make, model]);
+        connection.release();
+
+        const weight = result.length > 0 ? result[0].curb_weight : 'Not available';
+
+        res.render('getweight', { years: [], makes: [], models: [], weightResult: `Weight for ${year} ${make} ${model}: ${weight}` });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 // Route to /
 app.get('/callback', (req,res) => {
     res.send('callback reached')

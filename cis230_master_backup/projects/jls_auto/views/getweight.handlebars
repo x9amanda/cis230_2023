@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Weight Lookup</title>
+</head>
+
+<body>
+    <h1>Vehicle Weight Lookup</h1>
+
+    <form action="/weightresult" method="post">
+        <label for="year">Year:</label>
+        <select name="year" id="year">
+            {{#each years}}
+                <option value="{{this}}">{{this}}</option>
+            {{/each}}
+        </select>
+
+        <label for="make">Make:</label>
+        <select name="make" id="make">
+            {{#each makes}}
+                <option value="{{this}}">{{this}}</option>
+            {{/each}}
+        </select>
+
+        <label for="model">Model:</label>
+        <select name="model" id="model">
+            {{#each models}}
+                <option value="{{this}}">{{this}}</option>
+            {{/each}}
+        </select>
+
+        <button type="submit">Get Weight</button>
+    </form>
+
+    {{#if weightResult}}
+        <p>{{weightResult}}</p>
+    {{/if}}
+
+</body>
+
+</html>

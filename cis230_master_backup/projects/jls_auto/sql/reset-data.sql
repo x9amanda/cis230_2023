@@ -1,6 +1,4 @@
-USE metaldb;
-
-/* SHOW DATABASES; */
+USE scrapdb;
 
 CREATE OR REPLACE TABLE log_in
 (
@@ -8,20 +6,16 @@ CREATE OR REPLACE TABLE log_in
   password VARCHAR(50) NULL
 );
 
-INSERT INTO log_in values ('amandadockray', 'metalpw');
+INSERT INTO log_in VALUES ('metaluser', 'metalpw');
 
 
 CREATE OR REPLACE TABLE vehicles (
     id      INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     year    VARCHAR(30) NOT NULL,
-    make   VARCHAR(20) NOT NULL,
-    model  VARCHAR(20) NOT NULL,
-    engine  VARCHAR(10) NOT NULL,
-    GVW   decimal(10,2) NOT NULL,
+    make    VARCHAR(20) NOT NULL,
+    model   VARCHAR(20) NOT NULL,
+    curb_weight     DECIMAL(10,2) NOT NULL
 );
 
-/* INSERTS WILL GO HERE */
-insert into vehicles(year, make, model, engine, GVW)
-values (
-
-);
+INSERT INTO vehicles (year, make, model, curb_weight)
+VALUES (2018, 'jeep', 'compass', 4561.23);
