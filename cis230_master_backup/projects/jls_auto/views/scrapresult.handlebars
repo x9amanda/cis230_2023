@@ -13,18 +13,47 @@
 </head>
 
 <body>
-    <h1>{{title}}</h1><br>
-    <button id="toggleButton">Show Data</button><br>
-    <table id="dataTable" style="display:none;">
-        <tr>
-            <th>Make</th>
-            <th>Model</th>
-            <th>Year</th>
-            <th>Engine</th>
-            <th>Manufacture Date</th>
-        </tr>
+    <h1>{{ title }}</h1>
+    <button id="toggleButton">Hide Data</button>
+    <table id="dataTable" style="display:block;" border="2">
+
+
+        {{#if data}}
+
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Specs</th>
+                <th>Weight</th>
+                <th>Scrap Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ data.year }}</td>
+                <td>{{ data.make }}</td>
+                <td>{{ data.model }}</td>
+                <td>{{ data.specs }}</td>
+                <td>{{ data.weight }}</td>
+                <td><!-- You can display the Scrap Price here --></td>
+            </tr>
+        </tbody>
+
+        {{else}}
+        <p>No data available</p>
+        {{/if}}
+
+        <img src="/images/snowjo.jpg" alt="Icon" height="150" width="200">
+
+        {{#if isAuthenticated}}
+        <p>User is authenticated</p>
+        {{else}}
+        <p>User is not authenticated</p>
+        {{/if}}
     </table>
-    <script src="../../scripts/selection.js"></script>
+    <script src="/scripts/selection.js"></script>
 </body>
 
 </html>

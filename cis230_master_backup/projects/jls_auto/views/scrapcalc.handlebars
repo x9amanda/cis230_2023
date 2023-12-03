@@ -16,50 +16,44 @@
     <h1>{{title}}</h1>
 
     <section>
-        <h2>Select Your Vehicle</h2>
-        <form id="vehicleForm" action="/views/scrapresult">
-            <label for="year">Year:</label>
-            <select id="year" name="year">
-                <!-- Populate this dropdown dynamically with years -->
-            </select>
 
-            <label for="make">Make:</label>
-            <select id="make" name="make">
-                <!-- Populate this dropdown dynamically with makes -->
-            </select>
 
-            <label for="model">Model:</label>
-            <select id="model" name="model">
-                <!-- Populate this dropdown dynamically with models -->
+        <form action="/scrapresult" method="post">
+            <label for="year">Year:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <select name="year" id="year" placeholder="Year">
+                {{#each years}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
             </select>
-
-            <button class="button" type="button" onclick="calculateScrapPrice()">Calculate Scrap Price</button>
+<br>
+            <label for="make">Make:&nbsp;&nbsp;</label>
+            <select name="make" id="make" placeholder="Make">
+                {{#each makes}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+<br>
+            <label for="model">Model:&nbsp;</label>
+            <select name="model" id="model" placeholder="Model">
+                {{#each models}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+<br>
+            <label for="specs">Specs:&nbsp;</label>
+            <select name="specs" id="specs" placeholder="Specs">
+                {{#each specss}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+            <br><br>
+            <button id="button" type="submit">Calculate Scrap Price</button>
         </form>
 
-        <div id="result">
-            <!-- Display the scrap metal price here -->
-        </div>
+        {{#if weightResult}}
+        <p>{{weightResult}}</p>
+        {{/if}}
     </section>
-
-    {{!-- <script>
-        // Function to fetch and display the scrap metal price
-        async function calculateScrapPrice() {
-            const year = document.getElementById('year').value;
-            const make = document.getElementById('make').value;
-            const model = document.getElementById('model').value;
-
-            try {
-                // Send a request to your server to get the scrap metal price based on the selected vehicle
-                const response = await axios.get(`/getMetalPrice/${year}-${make}-${model}`);
-
-                // Display the scrap metal price
-                document.getElementById('result').innerText = `Scrap Metal Price: $${response.data.metalPrice}`;
-            } catch (error) {
-                console.error(error);
-                document.getElementById('result').innerText = 'Error fetching scrap metal price';
-            }
-        }
-    </script> --}}
 </body>
 
 </html>

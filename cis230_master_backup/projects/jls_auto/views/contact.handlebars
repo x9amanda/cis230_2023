@@ -15,10 +15,29 @@
     <h1>{{title}}</h1>
 
     <section>
-        <p>Feel free to get in touch with us!</p>
-        <p>Email: joelindsay@gmail.com</p>
-        <p>Phone: 518-423-0223</p><br><br>
         <img src={{src}} alt="JL'$ Auto Recycling" height="100" width="150">
+
+        <h2 id="contact">Have questions or need assistance? Reach out to us!</h2>
+    </section>
+    <section>
+        <h2 id="h2">Phone:</h2>
+        <textarea class="formtextarea" id="phone">518-423-0223</textarea>
+    </section>
+    </section>
+    <section>
+        <h2>Email:</h2>
+        <form class="form" action="mailto:joelindsay@gmail.com" method="post" enctype="text/plain">
+            <label class="formlabel" for="name">Your Name:</label>
+            <input class="forminput" type="text" id="name" name="name" required>
+
+            <label class="formlabel" for="email">Your Email:</label>
+            <input class="forminput" type="email" id="email" name="email" required>
+
+            <label class="formlabel" for="message">Your Message:</label>
+            <textarea class="formtextarea" id="message" name="message" rows="4" required></textarea>
+            <br>
+            <button class="formbutton" type="submit">Submit</button>
+        </form>
     </section>
 
 </body>

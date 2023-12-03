@@ -90,18 +90,19 @@ app.get('/test', async (req, res) => {
 app.use(express.urlencoded({ extended: true }));
 
 // Route to render the form
-app.get('/getweight', async (req, res) => {
+app.get('/scrapcalc', async (req, res) => {
     try {
         const connection = await pool.getConnection();
-        const usedb = await connection.query('USE scrapdb');
-        const result = await connection.query('SELECT DISTINCT year, make, model FROM vehicles');
+        await connection.query('USE scrapdb');
+        const result = await connection.query('SELECT DISTINCT year, make, model, specs FROM vehicles');
         connection.release();
 
         const years = [...new Set(result.map(vehicle => vehicle.year))];
         const makes = [...new Set(result.map(vehicle => vehicle.make))];
         const models = [...new Set(result.map(vehicle => vehicle.model))];
+        const specss = [...new Set(result.map(vehicle => vehicle.specs))];
 
-        res.render('getweight', { years, makes, models });
+        res.render('scrapcalc', { years, makes, models, specss });
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -109,26 +110,54 @@ app.get('/getweight', async (req, res) => {
 });
 
 // Route to handle form submission and display the weight result
-app.post('/weightresult', async (req, res) => {
-    const { year, make, model } = req.body;
+// Route to handle form submission and display the weight result
+app.post('/scrapresult', async (req, res) => {
+    const { year, make, model, specs } = req.body;
 
     try {
         const connection = await pool.getConnection();
         await connection.query('USE scrapdb');
-        const result = await connection.query('SELECT curb_weight FROM vehicles WHERE year = ? AND make = ? AND model = ?', [year, make, model]);
+
+        // Fetch data from the database based on the submitted form values
+        const result = await connection.query('SELECT year, make, model, specs, curb_weight FROM vehicles WHERE year = ? AND make = ? AND model = ? AND specs = ?', [year, make, model, specs]);
+
         connection.release();
 
-        const weight = result.length > 0 ? result[0].curb_weight : 'Not available';
+        // Check if data is available
+        if (result.length > 0) {
+            const data = {
+                year: result[0].year,
+                make: result[0].make,
+                model: result[0].model,
+                specs: result[0].specs,
+                weight: result[0].curb_weight
+            };
 
-        res.render('getweight', { years: [], makes: [], models: [], weightResult: `Weight for ${year} ${make} ${model}: ${weight}` });
+            res.render('scrapresult', {
+                title: "JL'$ Auto Scrap Calculator",
+                data: data,
+                icon: '/images/icon.ico',
+                isAuthenticated: req.oidc.isAuthenticated()
+            });
+        } else {
+            res.render('scrapresult', {
+                title: "JL'$ Auto Scrap Calculator",
+                data: null,  // No data available
+                icon: '/images/icon.ico',
+                isAuthenticated: req.oidc.isAuthenticated()
+            });
+        }
+
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
 });
 
+
+
 // Route to /
-app.get('/callback', (req,res) => {
+app.get('/callback', (req, res) => {
     res.send('callback reached')
 })
 
@@ -166,7 +195,7 @@ app.get('/login', (req, res) => {
     } else {
         res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
     }
-    
+
 });
 
 // FIX THIS!!!!! getting error
@@ -232,7 +261,7 @@ app.use((err, req, res, next) => {
 
 
 // custom 404
-app.use((req, res)=> {
+app.use((req, res) => {
     res.type('text/plain')
     //console.log(res.get('Content-Type'))
     res.status(404)

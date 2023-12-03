@@ -3,12 +3,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const dataTable = document.getElementById('dataTable');
 
     toggleButton.addEventListener('click', function () {
-        if (dataTable.style.display === 'none') {
-            dataTable.style.display = 'table';
-            toggleButton.textContent = 'Hide Data';
-        } else {
+        if (dataTable.style.display === 'block') {
             dataTable.style.display = 'none';
             toggleButton.textContent = 'Show Data';
+        } else {
+            dataTable.style.display = 'block';
+            toggleButton.textContent = 'Hide Data';
         }
     });
 });
