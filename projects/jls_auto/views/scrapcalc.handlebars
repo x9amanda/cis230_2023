@@ -8,52 +8,41 @@
     <link rel="stylesheet" href="/styles/scrapcalc.css" />
     <link rel="stylesheet" href="/styles/header.css" />
     <link rel="stylesheet" href="/styles/footer.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@700&display=swap">
     <link rel="icon" href={{icon}}>
 </head>
 
 <body>
     <h1>{{title}}</h1>
-
     <section>
-
-
-        <form action="/scrapresult" method="post">
+        <form id="scrapForm" action="/scrapresult" method="post">
             <label for="year">Year:&nbsp;&nbsp;&nbsp;&nbsp;</label>
             <select name="year" id="year" placeholder="Year">
                 {{#each years}}
                 <option value="{{this}}">{{this}}</option>
                 {{/each}}
             </select>
-<br>
+            <br>
             <label for="make">Make:&nbsp;&nbsp;</label>
             <select name="make" id="make" placeholder="Make">
                 {{#each makes}}
                 <option value="{{this}}">{{this}}</option>
                 {{/each}}
             </select>
-<br>
+            <br>
             <label for="model">Model:&nbsp;</label>
             <select name="model" id="model" placeholder="Model">
                 {{#each models}}
                 <option value="{{this}}">{{this}}</option>
                 {{/each}}
             </select>
-<br>
-            <label for="specs">Specs:&nbsp;</label>
-            <select name="specs" id="specs" placeholder="Specs">
-                {{#each specss}}
-                <option value="{{this}}">{{this}}</option>
-                {{/each}}
-            </select>
+            <input type="hidden" name="curb_weight" id="curb_weight" value="">
             <br><br>
-            <button id="button" type="submit">Calculate Scrap Price</button>
+            <button id="button" type="submit" onclick="calculateScrapPrice()">Calculate Scrap Price</button>
         </form>
-
-        {{#if weightResult}}
-        <p>{{weightResult}}</p>
-        {{/if}}
     </section>
+    <script src="/scripts/scrapcalc.js"></script>
+
 </body>
 
 </html>
