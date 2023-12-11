@@ -2,14 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
-    <link rel="stylesheet" href="/styles/scrapresult.css" />
-    <link rel="stylesheet" href="/styles/header.css" />
-    <link rel="stylesheet" href="/styles/footer.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@700&display=swap">
-    <link rel="icon" href={{icon}}>
+    <!-- Your existing head content -->
 </head>
 
 <body>
@@ -25,7 +18,8 @@
                 <th>Make</th>
                 <th>Model</th>
                 <th>Curb Weight</th>
-                <th>Scrap Price</th>
+                <th>Scrap Steel Price</th>
+                <th>Vehicle Scrap Price</th>
             </tr>
         </thead>
         <tbody>
@@ -35,6 +29,7 @@
                 <td>{{ data.model }}</td>
                 <td>{{ data.curb_weight }}</td>
                 <td>{{ data.scrapPrice }}</td>
+                <td>{{ data.vehicleScrapPrice }}</td>
             </tr>
         </tbody>
         {{else}}

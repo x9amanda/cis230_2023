@@ -4,8 +4,8 @@ Year,Make,Model,Base Curb Weight (lbs)
 1996,Chevrolet,Camaro,3307
 1996,Chevrolet,Corvette,3307
 1996,Chevrolet,Impala,4180
-1996,Ford,Mustang,3068.0
-1996,Ford,Taurus,3326.0
+1996,Ford,Mustang,3068
+1996,Ford,Taurus,3326
 1996,Jeep,Cherokee,2876
 1996,Lincoln,Continental,3911
 1997,Acura,NSX,3069
@@ -51,12 +51,12 @@ Year,Make,Model,Base Curb Weight (lbs)
 1999,Lincoln,Navigator,5245
 2000,Audi,A6,3638
 2000,Audi,S4,3593
-2000,Ford,Focus,2551.0
+2000,Ford,Focus,2551
 2000,Honda,Insight,1856
 2000,Lexus,LX,5401
 2001,Acura,MDX,4328
 2001,BMW,X5,4519
-2001,Ford,Escape,2991.0
+2001,Ford,Escape,2991
 2001,Hyundai,Santa,3494
 2001,Kia,Optima,3263
 2001,Kia,Rio,2242
@@ -90,15 +90,15 @@ Year,Make,Model,Base Curb Weight (lbs)
 2004,Mazda,MAZDA3,2696
 2004,Nissan,Armada,5013
 2005,Chrysler,300,3623
-2005,Ford,GT,3350.0
+2005,Ford,GT,3350
 2005,Honda,Civic,2440
 2005,Hyundai,Tucson,3240
-2006,Ford,Fusion,3151.0
+2006,Ford,Fusion,3151
 2006,Honda,Ridgeline,4494
 2007,Audi,A3,3263
 2007,Audi,S6,4486
 2007,Dodge,Charger,3648
-2007,Ford,Edge,4082.0
+2007,Ford,Edge,4082
 2007,Honda,Fit,2432
 2007,Jeep,Compass,3006
 2007,Lincoln,MKX,4191
@@ -123,7 +123,7 @@ Year,Make,Model,Base Curb Weight (lbs)
 2009,Cadillac,CTS, 6-speed manual (Built out for 2009 Model Year effective April 29
 2009,Cadillac,CTS-V, 6-speed manual (Built out for 2009 Model Year effective April 29
 2009,Dodge,Journey,3692
-2009,Ford,Flex,4498.0
+2009,Ford,Flex,4498
 2009,Mercedes-Benz,G,5622
 2009,Nissan,370Z,3232
 2009,Subaru,Outback,3320
@@ -139,8 +139,8 @@ Year,Make,Model,Base Curb Weight (lbs)
 2010,Volvo,XC60,4174
 2011,Bentley,Mulsanne,5699
 2011,Chevrolet,Volt,3781
-2011,Ford,Explorer,4557.0
-2011,Ford,Fiesta,2537.0
+2011,Ford,Explorer,4557
+2011,Ford,Fiesta,2537
 2011,Nissan,Leaf,3366
 2012,Audi,A7,4210
 2012,Audi,A8,4453
@@ -165,7 +165,7 @@ Year,Make,Model,Base Curb Weight (lbs)
 2014,BMW,i8,3455
 2014,Chevrolet,Spark,2989
 2014,FIAT,500L,3203
-2014,Ford,Transit,3979.0
+2014,Ford,Transit,3979
 2014,INFINITI,Q60,3633
 2014,INFINITI,Q70,3858
 2014,INFINITI,QX50,3790
@@ -191,7 +191,7 @@ Year,Make,Model,Base Curb Weight (lbs)
 2015,Lincoln,MKC,3791
 2015,Porsche,Macan,4112
 2015,Ram,ProMaster,3695
-2015,Volkswagen,e-Golf,93.5
+2015,Volkswagen,e-Golf,93
 2015,Volvo,V60,3527
 2016,BMW,M2,3450
 2016,Cadillac,ATS,3373
@@ -216,9 +216,9 @@ Year,Make,Model,Base Curb Weight (lbs)
 2018,Ferrari,California,3813
 2018,Ferrari,GTC4Lusso,4233
 2018,FIAT,124,2436
-2018,Ford,Ecosport,3020.0
-2018,Genesis,G80,4195.0
-2018,Honda,Clarity,101.5
+2018,Ford,Ecosport,3020
+2018,Genesis,G80,4195
+2018,Honda,Clarity,101
 2018,Hyundai,IONIQ,2996
 2018,Hyundai,Ioniq,3318
 2018,Hyundai,Kona,3043
@@ -245,7 +245,7 @@ Year,Make,Model,Base Curb Weight (lbs)
 2018,Toyota,86,2774
 2018,Toyota,C-HR,3300
 2019,BMW,8-Series,4478
-2019,Genesis,G70,3580.0
+2019,Genesis,G70,3580
 2019,Kia,Stinger,3611
 2019,Lexus,UX,3307
 2019,Lincoln,Nautilus,4168

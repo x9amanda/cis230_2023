@@ -143,21 +143,23 @@ app.get('/test', isAuthenticated, async (req, res, next) => {
     }
 });
 
+
 // Route to render the form for scrap calculation
 app.get('/scrapcalc', isAuthenticated, async (req, res, next) => {
     let connection;
     try {
         connection = await pool.getConnection();
         await connection.query('USE scrapdb');
-        const result = await connection.query('SELECT DISTINCT year, make, model, curb_weight FROM vehicles');
+        const yearsResult = await connection.query('SELECT DISTINCT year FROM vehicles');
+        const makesResult = await connection.query('SELECT DISTINCT make FROM vehicles');
+        const modelsResult = await connection.query('SELECT DISTINCT model FROM vehicles');
 
-        // Extract unique values for years, makes, models, and curb weights
-        const years = [...new Set(result.map(vehicle => vehicle.year))];
-        const makes = [...new Set(result.map(vehicle => vehicle.make))];
-        const models = [...new Set(result.map(vehicle => vehicle.model))];
-        const curb_weights = [...new Set(result.map(vehicle => vehicle.curb_weight))];
+        // Extract unique values for years, makes, and models
+        const years = [...new Set(yearsResult.map(vehicle => vehicle.year))];
+        const makes = [...new Set(makesResult.map(vehicle => vehicle.make))];
+        const models = [...new Set(modelsResult.map(vehicle => vehicle.model))];
 
-        res.render('scrapcalc', { years, makes, models, curb_weights });
+        res.render('scrapcalc', { title: 'Scrap Calculation', years, makes, models });
     } catch (error) {
         console.error(error);
         res.status(500).render('error', { title: 'INTERNAL SERVER ERROR :(' });
@@ -172,50 +174,118 @@ app.get('/scrapcalc', isAuthenticated, async (req, res, next) => {
     }
 });
 
-// Route to display the scrap results in a table
-app.post('/scrapresult', isAuthenticated, async (req, res, next) => {
-    const { year, make, model, curb_weight } = req.body;
+// Route to handle form submission and redirect to /scrapresult
+app.post('/scrapcalc', isAuthenticated, async (req, res, next) => {
+    const { year, make, model } = req.body;
 
+    // Fetch curb_weight based on year, make, and model from the database
+    let connection;
     try {
-        // Fetch metal data
+        connection = await pool.getConnection();
+        await connection.query('USE scrapdb');
+        const result = await connection.query('SELECT curb_weight FROM vehicles WHERE year=? AND make=? AND model=?', [year, make, model]);
+
+        // Extract curb_weight
+        const curb_weight = result[0].curb_weight;
+
+        // Redirect to /scrapresult with the selected data
+        res.redirect(`/scrapresult?year=${year}&make=${make}&model=${model}&curb_weight=${curb_weight}`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).render('error', { title: 'INTERNAL SERVER ERROR :(' });
+    } finally {
+        if (connection) {
+            try {
+                connection.release();
+            } catch (releaseError) {
+                next(releaseError);
+            }
+        }
+    }
+});
+
+// Route to render the scrap result page
+app.get('/scrapresult', isAuthenticated, async (req, res, next) => {
+    // Retrieve data from query parameters
+    const { year, make, model, curb_weight } = req.query;
+
+    // Fetch current scrap steel price from the API
+    const METALS_API_KEY = '2i4cs0v3a6jn91incwcuy321m2tcd0pzhiujsqmpg1e0etwq2n4so5yc5qek';
+    try {
         const metalResponse = await axios.get('https://metals-api.com/api/latest', {
             params: {
-                access_key: '2i4cs0v3a6jn91incwcuy321m2tcd0pzhiujsqmpg1e0etwq2n4so5yc5qek',
+                access_key: METALS_API_KEY,
                 base: 'USD',
                 symbols: 'STEEL-SC'
             }
         });
 
-        // Extract the scrap steel price from the metal data
-        const scrapPrice = metalResponse.data.rates['STEEL-SC'];
+        const currentScrapPrice = metalResponse.data.rates['STEEL-SC'];
 
-        // Validate and process the data
-        if (!year || !make || !model || isNaN(parseFloat(curb_weight))) {
-            return res.status(400).json({ success: false, message: 'Invalid input data.' });
-        }        
+        // Calculate vehicle scrap price
+        const vehicleScrapPrice = curb_weight * currentScrapPrice;
 
-        // Render the scrapresult handlebars template with the data
         res.render('scrapresult', {
-            title: "JL'$ Auto Scrap Calculator",
-            data: {
-                year,
-                make,
-                model,
-                curb_weight,
-                scrapPrice: parseFloat(scrapPrice * curb_weight).toFixed(2),
-            },
-            icon: '/images/icon.ico',
-            isAuthenticated: req.oidc.isAuthenticated(),
+            title: 'Scrap Result',
+            data: { year, make, model, curb_weight, scrapPrice: currentScrapPrice, vehicleScrapPrice }
         });
-
-        res.json({ success: true, message: 'Scrap result received successfully.' });
-
     } catch (error) {
         console.error(error);
         res.status(500).render('error', { title: 'INTERNAL SERVER ERROR :(' });
     }
 });
 
+// Route to get makes based on the selected year
+app.get('/getMakes', isAuthenticated, async (req, res, next) => {
+    const { year } = req.query;
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+        await connection.query('USE scrapdb');
+        const result = await connection.query('SELECT DISTINCT make FROM vehicles WHERE year=?', [year]);
+
+        const makes = result.map(vehicle => vehicle.make);
+        res.json(makes);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    } finally {
+        if (connection) {
+            try {
+                connection.release();
+            } catch (releaseError) {
+                next(releaseError);
+            }
+        }
+    }
+});
+
+// Route to get models based on the selected year and make
+app.get('/getModels', isAuthenticated, async (req, res, next) => {
+    const { year, make } = req.query;
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+        await connection.query('USE scrapdb');
+        const result = await connection.query('SELECT DISTINCT model FROM vehicles WHERE year=? AND make=?', [year, make]);
+
+        const models = result.map(vehicle => vehicle.model);
+        res.json(models);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    } finally {
+        if (connection) {
+            try {
+                connection.release();
+            } catch (releaseError) {
+                next(releaseError);
+            }
+        }
+    }
+});
 
 // Route to handle callback
 app.get('/callback', isAuthenticated, (req, res) => {
@@ -226,6 +296,13 @@ app.get('/callback', isAuthenticated, (req, res) => {
 app.get('/about', isAuthenticated, requiresAuth(), (req, res) => {
     res.render('about', {
         title: "About JL'$ Auto",
+        icon: '/images/icon.ico',
+    });
+
+});// Route to render 'Contact' page
+app.get('/contact', isAuthenticated, requiresAuth(), (req, res) => {
+    res.render('contact', {
+        title: "Contact JL'$ Auto",
         icon: '/images/icon.ico',
     });
 });
