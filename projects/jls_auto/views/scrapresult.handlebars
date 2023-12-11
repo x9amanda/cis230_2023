@@ -10,14 +10,12 @@
     <link rel="stylesheet" href="/styles/footer.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@700&display=swap">
     <link rel="icon" href={{icon}}>
-    <script src="/scripts/scrapresult.js"></script>
 </head>
 
 <body>
     <h1>{{ title }}</h1>
 
     <table id="dataTable" style="display:block;" border="2">
-
 
         {{#if data}}
 
@@ -31,27 +29,20 @@
             </tr>
         </thead>
         <tbody>
-        {{!-- <tr>
-            <td>{{ data.year }}</td>
-            <td>{{ data.make }}</td>
-            <td>{{ data.model }}</td>
-            <td>{{ data.curb_weight }}</td>
-            <td>{{ data.scrapPrice}}</td>
-        </tr> --}}
+            <tr>
+                <td>{{ data.year }}</td>
+                <td>{{ data.make }}</td>
+                <td>{{ data.model }}</td>
+                <td>{{ data.curb_weight }}</td>
+                <td>{{ data.scrapPrice }}</td>
+            </tr>
         </tbody>
-
         {{else}}
         <h1><em>No data available</em></h1>
         {{/if}}
-
         <img src="/images/snowjo.jpg" alt="Icon" height="150" width="200">
-
-        {{#if isAuthenticated}}
-        <p>User is authenticated</p>
-        {{else}}
-        <p>User is not authenticated</p>
-        {{/if}}
     </table>
+    <script src="/scripts/scrapresult.js" defer></script>
 </body>
 
 </html>

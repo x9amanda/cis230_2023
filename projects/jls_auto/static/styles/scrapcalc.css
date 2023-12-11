@@ -19,6 +19,7 @@
 form label {
     flex-basis: 150px;
 }
+
 form select {
     font-family: 'Bitter', serif;
     color: #333;

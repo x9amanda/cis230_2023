@@ -1,25 +1,38 @@
-// scrapcalc.js
-// Select the button element using its id
-const button = document.getElementById('button');
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('scrapForm');
 
-function calculateScrapPrice(event) {
-    event.preventDefault();
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
 
-    const year = document.getElementById('year').value;
-    const make = document.getElementById('make').value;
-    const model = document.getElementById('model').value;
-    const curb_weight = document.getElementById('curb_weight').value;
+        const curb_weight = parseFloat(document.getElementById('curb_weight').value) || 0;
+        const year = document.getElementById('year').value;
+        const make = document.getElementById('make').value;
+        const model = document.getElementById('model').value;
 
-    axios.post('/scrapresult', { year, make, model, curb_weight })
+        fetch('/scrapresult', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ year, make, model, curb_weight }),
+        })
         .then(response => {
-            // Redirect to /scrapresult only if needed
-            window.location.href = '/scrapresult';
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!isNaN(data.scrapPrice)) {
+                window.location.href = '/scrapresult';
+            } else {
+                console.error('Invalid scrapPrice on the client side:', data.scrapPrice);
+            }
         })
         .catch(error => {
-            // Handle errors and display an error message if needed
             console.error('Error fetching scrap steel price:', error);
+            // Log the response text for additional information
+            console.error('Response text:', error.response.text());
         });
-}
-
-// Add an event listener to the button
-button.addEventListener('click', calculateScrapPrice);
+    });
+});
